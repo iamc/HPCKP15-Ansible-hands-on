@@ -6,9 +6,9 @@
 We will use VirtualBox based virtual machines deployed with Vagrant, so in order to follow the tutorial you must have both [VirtualBox]() and [Vagrant]() installed in your laptopt.
 
  * VirtualBox: install it from your distribution repositories or straigth from [its webpage](https://www.virtualbox.org/wiki/Downloads)
- * Vagrant: just [download](https://www.vagrantup.com/downloads.html) the corresponding package and install it.
+ * Vagrant: Installing vagrant is trivial, just a matter of donwloading the installer/package and installing it. See the [Vagrant install documentation](https://docs.vagrantup.com/v2/installation/index.html). 
 
-After installing them get the VirtualBox machine I prepared so that you have it ready for the hands-on session. It's a Scientific Linux 6.5 minimal install Vagrant "box" (virtual machine template) I created myself. Just download it (almost 600MB) and add it to your Vagrant boxes
+After installing them get the VirtualBox machine template I prepared so that you have everything ready for the hands-on session. It's a Scientific Linux 6.5 minimal install Vagrant "box" (virtual machine template) I created myself. Just download it (almost 600MB) and add it to your Vagrant boxes
 
     wget https://dl.dropboxusercontent.com/u/49910137/scientific65_x86_64_minimal.box
     vagrant box add --name SL-65-x86_64-minimal scientific65_x86_64_minimal.box
