@@ -5,7 +5,7 @@
 
 We will use VirtualBox based virtual machines deployed with Vagrant, so in
 order to follow the tutorial you must have both [VirtualBox]() and [Vagrant]()
-installed in your laptopt.
+installed in your laptop.
 
  * VirtualBox: install it from your distribution repositories or straigth from [its webpage](https://www.virtualbox.org/wiki/Downloads)
  * Vagrant: Installing vagrant is trivial, just a matter of donwloading the installer/package and installing it. See the [Vagrant install documentation](https://docs.vagrantup.com/v2/installation/index.html). 
