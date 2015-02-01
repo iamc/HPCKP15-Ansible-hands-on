@@ -2,6 +2,8 @@
 
 ## Prerequisites
 
+(See [HPCKP15-Ansible-hands-on`](https://github.com/iamc/HPCKP15-Ansible-hands-on/blob/master/HPCKP15-Ansible-hands-on.rst))
+
 We will use VirtualBox based virtual machines deployed with Vagrant, so in
 order to follow the tutorial you must have both [VirtualBox]() and [Vagrant]()
 installed in your laptop.
