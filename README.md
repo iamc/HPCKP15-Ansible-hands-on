@@ -1,4 +1,3 @@
-# HPCKP15-Ansible-hands-on
 
 
 ## Prerequisites
