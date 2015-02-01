@@ -200,6 +200,3 @@ As one of the Ansible strengths is how easy is to read its configuration files
 we will just comment on how they are structured and which its funtion is and refer to them as they are
 self-explanatory.
 
-
-
- did, recheck that we can access all nodes::
