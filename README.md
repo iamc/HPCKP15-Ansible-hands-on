@@ -18,7 +18,12 @@ download it (almost 600MB) and add it to the Vagrant boxes
     wget https://dl.dropboxusercontent.com/u/49910137/scientific65_x86_64_minimal.box
     vagrant box add --name SL-65-x86_64-minimal scientific65_x86_64_minimal.box
 
-Now we are ready to start playing. The Vagrant and Ansible configuration files will be provided later on.
+If you want to follow the hands-on tutorial clone this repository and bootstrap Vagrant. As we are using Ansible itself for the initial cluster bootstrap this will take some time: it will setup epel repository, install some packages, etc., which takes some time, specially the first time you do it. 
+
+    git clone https://github.com/iamc/HPCKP15-Ansible-hands-on.git
+    vagrant up
+
+If you are new to Vagrant, ``vagrant`` command will give you some usage guidelines.
 
 
 ## Abstract
@@ -42,9 +47,7 @@ But this also comes with a price: a steep learning curve and the CMS system
 setup itself. Here we will present Ansible, a very easy to use CMS which, with
 its clientless (zero initial setup in the nodes) push model and the simple,
 human readable syntax of its YAML configuration files, perfectly fits the
-mindset of
-HPC cluster administrators.
-
+mindset of HPC cluster administrators.
 
 We will walk through setting up a basic
 configuration for a simple computing cluster created with virtual machines. As
@@ -54,14 +57,8 @@ testing environments.
 
 Using a very simple Vagrant configuration file we will setup a test cluster
 with a head node and a few computing nodes. Within the head node we will
-download Ansible, build a rpm package and install it. We will then write the
-inventory file with nodes of different types, make some test runs and create a
-basic Ansible playbook for eg. install some packages, distribute some
-configuration files and configure some services both in the head and the
-computing nodes.
-
-The Vagrant configuration file and virtual machine template (Vagrant "box") as
-well as the base Ansible files we will use will be provided beforehand so that
-anyone interested will be able to follow along the session in his/her laptop.
-
+have Ansible installed, we will then write the inventory file with nodes of
+different types, make some test runs and create a basic Ansible playbook for
+eg. install some packages, distribute some configuration files and configure
+some services both in the head and the computing nodes.
 

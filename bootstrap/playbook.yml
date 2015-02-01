@@ -1,0 +1,112 @@
+---
+##################
+# all servers
+##################
+- hosts: all
+  user: vagrant
+  sudo: True
+
+  tasks:
+    # We need this for Ansible itself as we have selinux enabled
+    - name: Install libselinux-python for ansible
+      yum: pkg=libselinux-python state=present
+
+    #
+    # hostname aliases
+    #
+    # This would have been better done using 'assemble' module and
+    #  the original hosts file in every host. We use templates here
+    #  for demostration purpose
+    #
+    - name: Get /etc/hosts file
+      template: src=files/hosts.j2 dest=/etc/hosts backup=yes owner=root group=root mode=644
+  
+    #
+    # authentication
+    #
+    - name: Get head node ssh public key
+      authorized_key: user=vagrant key="{{ lookup('file', 'files/ssh-keys/id_rsa.pub') }}"
+
+    - name: Get initial cluster known_hosts file
+      copy: src=files/known_hosts dest=/home/vagrant/.ssh/ owner=vagrant group=vagrant mode=644
+  
+
+
+##################
+# Head node
+##################
+- hosts: headnode
+  user: vagrant
+  sudo: True
+
+  tasks:
+    # 
+    # Authentication
+    #
+    # Copy ssh-keys. We have then pre-generated so we can easlily transfer them
+    # at bootstrap time from outside the Vagrant "environment".
+    - name: Transfer ssh keys
+      copy: src=files/ssh-keys/ dest=/home/vagrant/.ssh owner=vagrant group=vagrant 
+
+    - name: Ensure private key permissions
+      file: path=/home/vagrant/.ssh/id_rsa mode=600
+    
+    - name: Ensure public key permissions
+      file: path=/home/vagrant/.ssh/id_rsa.pub mode=640
+
+    #
+    # Repositories setup
+    #
+    # EPEL
+    - name: setup epel repo
+      yum: pkg=yum-conf-epel state=present
+
+    - name: Disable EPEL repo by defult
+      replace: dest=/etc/yum.repos.d/epel.repo
+               regexp='^enabled=1' 
+               replace='enabled=0'
+
+    # Disable media repo, mistakenly enabled in the vagrant box.
+    - name: Disable media repo
+      replace: dest=/etc/yum.repos.d/sl6-media.repo
+               regexp='^enabled=1' 
+               replace='enabled=0'
+ 
+    # 
+    # yum packages
+    #
+    # Common packages from standard repos
+    - name: Install common packages
+      yum: pkg={{ item }} state=present
+      with_items: 
+        - man
+        - man-pages
+        - tree
+        - vim-enhanced
+        - git
+        - iotop
+        - wget
+
+    # Common packages from epel
+    - name: Install common epel packages
+      yum: pkg={{ item }} enablerepo=epel state=present
+      with_items:
+        - bash-completion
+        - htop
+        - tmux
+        - ansible
+
+
+##################
+# Computing nodes
+##################
+- hosts: node*
+  user: vagrant
+  sudo: True
+
+  #  tasks:
+
+
+
+# -*- mode: ansible -*-
+# vi: ft=ansible :
