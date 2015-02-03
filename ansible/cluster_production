@@ -1,0 +1,12 @@
+[headnode]
+headnode ansible_ssh_host=10.100.100.1 ansible_ssh_user=vagrant
+
+[computing]
+node1 ansible_ssh_host=10.100.101.1  ansible_ssh_user=vagrant
+node2 ansible_ssh_host=10.100.101.2  ansible_ssh_user=vagrant
+node3 ansible_ssh_host=10.100.101.3  ansible_ssh_user=vagrant
+
+
+
+
+

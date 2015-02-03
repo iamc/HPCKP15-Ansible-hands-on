@@ -1,0 +1,10 @@
+---
+# file: computing.yml
+- hosts: computing
+  sudo: True
+
+  roles:
+    - common
+    - { role: check_mk, tags: [ 'check_mk' ] }
+#   - slurm
+#   - ganglia 

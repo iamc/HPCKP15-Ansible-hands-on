@@ -1,0 +1,57 @@
+---
+
+#
+# Repositories setup
+#
+
+# Disable media repo, mistakenly enabled in the vagrant box.
+- name: Disable media repo
+  replace: dest=/etc/yum.repos.d/sl6-media.repo
+           regexp='^enabled=1' 
+           replace='enabled=0'
+
+# EPEL
+- name: setup epel repo
+  yum: pkg=yum-conf-epel state=present
+
+- name: Disable EPEL repo by defult
+  replace: dest=/etc/yum.repos.d/epel.repo
+           regexp='^enabled=1' 
+           replace='enabled=0'
+  
+# 
+# yum packages
+#
+# Common packages from standard repos
+- name: Install common packages
+  yum: pkg={{ item }} state=present
+  with_items: 
+    - man
+    - man-pages
+    - tree
+    - vim-enhanced
+    - git
+    - iotop
+
+
+# Common packages from epel
+- name: Install common epel packages
+  yum: pkg={{ item }} enablerepo=epel state=present
+  with_items:
+    - bash-completion
+    - htop
+    - ncdu
+    - tmux
+    - ack
+
+
+# Install and setup ntp
+- name: Install ntp
+  yum: name=ntp state=present
+  tags: ntp
+
+- name: Start and enable ntp service
+  service: name=ntpd state=started enabled=true
+  tags: ntp
+
+

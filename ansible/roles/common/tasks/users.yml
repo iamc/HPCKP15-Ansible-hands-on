@@ -1,0 +1,67 @@
+---
+
+# General user creation and ssh access security.
+
+#########
+# USERS
+#########
+
+###############
+# add users
+###############
+#
+# Add users from global variables defined specifically for
+#  every host (host_vars) and groups (group_vars).
+# Order: host regular, host superusers, group superusers
+#
+# Host specific regular users
+- name: Add regular users
+  user: name={{ item }} state=present
+  with_items: sshusers
+
+
+# Host specific superusers
+- name: Add superusers
+  user: name={{ item }} state=present
+  with_items: sudoers
+
+
+# Group specific superusers
+- name: Add superusers for this group
+  user: name={{ item }} state=present 
+  with_items: sysadmins
+
+
+##############################
+# users permissions, keys,...
+##############################
+#
+# Sudoers: add host specific superusers  to nopassword-sudoers
+- name: Set sudo permissions to (local to this host) superusers
+  template: src=sudoer_nopass.j2 dest=/etc/sudoers.d/{{ item }}_conf owner=root group=root mode=0440
+  with_items: sudoers
+
+
+# Sudoers: add group specific superusers to nopassword-sudoers
+- name: Set sudo permissions to this host group superusers
+  template: src=sudoer_nopass.j2 dest=/etc/sudoers.d/{{ item }}_conf owner=root group=root mode=0440
+  with_items: sysadmins
+
+
+# authorized_keys: setup authorized_key for user root for system administrators
+#- name: Add authorized_keys for certain admins root access
+#  authorized_key: user=root
+#                  state=present
+#                  key="{{ item }}"
+#  with_file:
+#    - admin_pubkeys/inigo
+
+
+# add userlist to sshd_config AllowedUsers
+#- name: Add AllowUser to ssdh_config
+#  lineinfile: dest=/etc/ssh/sshd_config
+#              regexp=''
+#              insertafter=EOF
+#              line='AllowUsers {{ allowedusers }}'
+#  notify: reload sshd
+

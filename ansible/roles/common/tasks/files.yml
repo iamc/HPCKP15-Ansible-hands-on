@@ -1,0 +1,17 @@
+---
+
+#
+# hostname aliases
+#
+# This would have been better done using 'assemble' module and
+#  the original hosts file in every host. We use templates here
+#  for demostration purpose
+#
+- name: Get /etc/hosts file
+  template: src=hosts.j2 dest=/etc/hosts backup=yes owner=root group=root mode=644
+
+- name: Get slurm.conf file
+  copy: src=slurm.conf dest=/etc/slurm/slurm.conf backup=yes owner=root group=root mode=644 
+  tags: slurm
+
+

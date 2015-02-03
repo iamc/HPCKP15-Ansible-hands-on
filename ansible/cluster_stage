@@ -1,0 +1,9 @@
+[headnode]
+
+[computing]
+node1 ansible_ssh_host=10.100.101.1  ansible_ssh_user=vagrant
+
+
+
+
+

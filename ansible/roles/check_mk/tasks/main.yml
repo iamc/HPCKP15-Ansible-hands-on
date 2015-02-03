@@ -1,0 +1,23 @@
+---
+
+######################################
+# Install and setup check_mk agent
+######################################
+
+- name: Install check_mk agent
+  yum: name=/vagrant/ansible/check_mk-agent-1.2.4p5-1.noarch.rpm  state=present
+
+- name: Get iptables rules for check_mk-agent 
+  shell: iptables -L
+  register: iptablesrules
+  always_run: yes
+  changed_when: false # Never report as changed to keep the play results clean
+
+- name: Insert iptables rule for check_mk_agent if not present
+  command: /sbin/iptables -I INPUT -p tcp --dport 6556 -j ACCEPT -m comment --comment "check_mk-agent"
+  when: iptablesrules.stdout.find("check_mk-agent")  == -1
+  notify:
+    - save iptables
+    - restart iptables
+
+

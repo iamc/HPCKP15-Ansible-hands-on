@@ -1,0 +1,9 @@
+---
+# file: head.yml
+- hosts: headnode
+  sudo: True
+
+  roles:
+    - common
+#   - omd_server
+#   - ganglia-server
