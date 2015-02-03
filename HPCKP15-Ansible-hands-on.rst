@@ -200,3 +200,71 @@ As one of the Ansible strengths is how easy is to read its configuration files
 we will just comment on how they are structured and which its funtion is and refer to them as they are
 self-explanatory.
 
+Let's go into the ansible director and inspect it::
+
+    [vagrant@headnode ansible]$ ls -1 ansible/
+    check_mk-agent-1.2.4p5-1.noarch.rpm
+    cluster.yml
+    computing.yml
+    head.yml
+    inventory
+    roles
+
+    [vagrant@headnode ansible]$ ls -1 ansible/inventory
+    cluster
+    computing_production
+    computing_stage
+    head_production
+
+    [vagrant@headnode ansible]$ ls -1 ansible/roles/
+    check_mk
+    common
+    head
+
+
+``cluster``, ``computing_production``, ``computing_stage`` and
+``head_production``  are the inventory files for the whole cluster, the
+computing nodes, one computing node used for testing the Ansible playbooks, and
+the production head node respectively.
+
+The main playbook for deploying all the cluster is ``cluster.yml`` which itself
+just includes ``head.yml`` for the head node playbook and ``computing.yml``
+for the computing ones.
+
+The roles directory contain the Ansible "roles" which will be used for Ansible
+as defined in the corresponding main playbooks just mentioned. Take a look at
+it. In every role directory, ``main.yml`` is processed by ansible and all the
+variables/files whithin the role subfolders are directily accesible for any of
+its playbook files.
+
+
+Playbook deployment
+-------------------
+
+The way to proceed is modify the desired ansible playbook and the test that
+everything works as expected using the testing computing node defined in ``computing
+stage``::
+
+    ansible-playbook -i cluster_stage computing.yml
+
+Once we are happy with this we can deploy it to all computing nodes just
+using the production inventory file::
+
+    ansible-playbook -i cluster_production computing.yml
+
+We should, although did not do it here, set up also a head node testing system.
+Try it and see that nothing happens as we have not defined one::
+    
+    ansible-playbook -i cluster_stage head.yml
+
+And the same goes here; once happy with the changes just deploy::
+
+    ansible-playbook -i cluster_production head.yml
+
+Now you can check that rerunning your paybooks cluster wide (head node +
+computing nodes) everything goes ok::
+
+    ansible-playbook -i cluster_production cluster.yml
+
+
+Now go around the playbooks and enjoy!
