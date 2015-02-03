@@ -48,7 +48,11 @@
                regexp='^enabled=1' 
                replace='enabled=0'
  
-
+    #
+    # Create fake /etc/slurm directory
+    #
+    - name: create fake slurm configuration directory
+      file: path=/etc/slurm state=directory owner=root group=root mode=644
 
 ##################
 # Head node
@@ -125,7 +129,9 @@
       with_items:
         - bash-completion
         - htop
+        - ncdu
         - tmux
+        - ack
 
 
 # -*- mode: ansible -*-
