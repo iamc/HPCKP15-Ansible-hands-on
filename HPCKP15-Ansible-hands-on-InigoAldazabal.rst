@@ -204,17 +204,12 @@ Let's go into the ansible director and inspect it::
 
     [vagrant@headnode ansible]$ ls -1 ansible/
     check_mk-agent-1.2.4p5-1.noarch.rpm
+    cluster_production
+    cluster_stage
     cluster.yml
     computing.yml
     head.yml
-    inventory
     roles
-
-    [vagrant@headnode ansible]$ ls -1 ansible/inventory
-    cluster
-    computing_production
-    computing_stage
-    head_production
 
     [vagrant@headnode ansible]$ ls -1 ansible/roles/
     check_mk
@@ -222,14 +217,11 @@ Let's go into the ansible director and inspect it::
     head
 
 
-``cluster``, ``computing_production``, ``computing_stage`` and
-``head_production``  are the inventory files for the whole cluster, the
-computing nodes, one computing node used for testing the Ansible playbooks, and
-the production head node respectively.
+``cluster_production`` and ``cluster_stage`` are the inventory files for the whole cluster and for the testing, staging nodes. The testing inventory only shows one node, the one we'll use for testing, namely ``node1``.
 
 The main playbook for deploying all the cluster is ``cluster.yml`` which itself
 just includes ``head.yml`` for the head node playbook and ``computing.yml``
-for the computing ones.
+for the computing ones. 
 
 The roles directory contain the Ansible "roles" which will be used for Ansible
 as defined in the corresponding main playbooks just mentioned. Take a look at
@@ -237,11 +229,14 @@ it. In every role directory, ``main.yml`` is processed by ansible and all the
 variables/files whithin the role subfolders are directily accesible for any of
 its playbook files.
 
+We will indicate whether we are deploying for testing or for production by
+means of the different hosts file.
+
 
 Playbook deployment
 -------------------
 
-The way to proceed is modify the desired ansible playbook and the test that
+The way to proceed is to modify the desired ansible playbook(s) and the test that
 everything works as expected using the testing computing node defined in ``computing
 stage``::
 
@@ -267,4 +262,36 @@ computing nodes) everything goes ok::
     ansible-playbook -i cluster_production cluster.yml
 
 
-Now go around the playbooks and enjoy!
+Of course the Way To Go (TM) involves also using git, hg or so in order to keep
+track of the chages to the playbooks, inventory files, etc.
+
+Now go around the playbooks and enjoy! Eg. modify the slurm file, and "deploy"
+it::
+
+    vim roles/common/files/slurm.conf
+    ansible-playbook -i cluster_stage computing.yml
+
+Once we are happy with the new slurm.conf file we just deploy cluster wide::
+
+    ansible-playbook -i cluster_production cluster.yml
+    
+Now take a look at the files, go for the Ansible documentation and peek around
+and enjoy the play!
+
+
+References
+==========
+
+`OMD documentation web page`_ itself is very good and has modules documentation examples for
+various cases which many times you can just copy-paste to your playbooks with
+minimal adaption.
+
+Also check out the `github ansible tutorial`_ colaboratively developed and that
+gives a very smooth entry path to Ansible, also using Vagrant for creating
+virtual machines, although you can use this tutorial virtual cluster if
+desired. It's structured in chapters with increasing difficulty.
+
+.. _`OMD documentation web page`: http://docs.ansible.com/
+.. _`github ansible tutorial`: https://github.com/leucos/ansible-tuto
+
+
